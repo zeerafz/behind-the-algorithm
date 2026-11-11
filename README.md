@@ -1,6 +1,6 @@
 # Behind the Algorithm
 
-A 42-slide interactive presentation about reverse engineering, recommendation systems, and digital privacy. It opens with a ring ad and a short-video session, then explores Android app analysis, how a feed ranks videos, and what changes when personalization runs on the device.
+A 47-slide English presentation about reverse engineering, recommendation systems, and digital privacy. It explores Android app analysis, video ranking, ad targeting, and on-device personalization. The final three slides contain two five-question quizzes and a set of clickable references.
 
 [Open the presentation on GitHub Pages](https://zeerafz.github.io/behind-the-algorithm/)
 
@@ -26,6 +26,7 @@ The toolbar also has buttons for mouse and touch navigation. When a button has f
 - **26 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. Cooking shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
 - **28 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
 - **30 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
+- **45–46 · Quizzes.** Choose answers to see immediate feedback. On a phone in portrait, scroll through the questions.
 
 ## GitHub Pages
 
@@ -40,5 +41,6 @@ Speaker notes are hidden in the presentation by default and available in the pub
 - `js/slides-data.js` contains the slide titles and notes.
 - `js/diagrams.js` contains the SVG artwork. `js/demos.js` implements the three interactive demos.
 - `js/app.js` and `js/presenter.js` handle navigation and keep the windows in sync.
-- `assets/images/` contains the three images generated with ImageGen. [Cover](assets/images/cover.webp) · [Ring ad](assets/images/conversation.webp) · [Closing illustration](assets/images/reflection.webp)
+- `js/review.js` contains the two listening scenarios, quizzes, and references.
+- `assets/images/` contains the three ImageGen illustrations and two user-provided screenshots. [Cover](assets/images/cover.webp) · [Ring ad](assets/images/conversation.webp) · [Closing illustration](assets/images/reflection.webp) · [Device linking](assets/images/scene-device-linking.png) · [Behavior signals](assets/images/scene-behavior-signals.png)
 - [Sources and evidence limits](SOURCES.md) lists the references behind the slides and the claims that remain open.

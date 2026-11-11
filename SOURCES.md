@@ -17,13 +17,14 @@
 - The reference screenshots include field names and claims about **31 models and 58 variables**. We found no reproducible test that confirms the counts or their scope, establishes that motion, brightness, or charging state affects For You ranking, or shows that the named functions predict when a viewer will reopen the app or intervene before an expected exit.
 - TikTok’s U.S. privacy policy names battery state and keystroke patterns as technical data and says some user content may be uploaded during creation. What happens to the text of an unsent private message that a viewer deletes, and whether these fields affect ranking, require independent evidence. [TikTok U.S. Privacy Policy](https://t.tiktok.com/legal/page/us/privacy-policy/en)
 
-## Ads and microphone access · Slides 32–36
+## Ads and microphone access · Slides 32–38
 
 - An FTC staff report describes linking devices through known signals such as a login or probabilistic signals such as shared IP addresses. The ring story is hypothetical. Its timeline alone cannot establish what caused the ad. [FTC Cross-Device Tracking Staff Report](https://www.ftc.gov/reports/cross-device-tracking-federal-trade-commission-staff-report-january-2017)
+- Slides 35 and 36 reproduce two user-provided illustrations. The espresso machine scenario illustrates a possible inference. The behavior table gives hypothetical measurements and interpretations. The figures do not document an actual device link, platform thresholds, viewer intent, or an audio recording. [Device linking illustration](assets/images/scene-device-linking.png) · [Behavior signals illustration](assets/images/scene-behavior-signals.png)
 - The 2018 Panoptispy study found leaks of images and video in a sample of Android apps. It recorded no audio leaks in its experiments, within the limits of the sample and method. An accurate ad by itself is insufficient evidence of recording. We found no convincing general evidence that major platforms routinely record private conversations to target ads. [Panoptispy](https://petsymposium.org/popets/2018/popets-2018-0030.php)
 - In its final 2026 complaint, the FTC said that CMG’s Active Listening service did not collect or use voice data for the service it investigated. [FTC Final Complaint](https://www.ftc.gov/system/files/ftc_gov/pdf/2423029c4838cmgfinalcomplaint.pdf)
 
-## Privacy choices · Slides 37–40
+## Privacy choices · Slides 39–42
 
 - Android and Apple document sensor permissions and microphone and camera indicators. The controls available to a viewer depend on the operating system version and settings. [Android privacy controls](https://developer.android.com/training/permissions/explaining-access) · [Apple hardware access controls](https://support.apple.com/en-ca/guide/iphone/iph168c4bbd5/27/ios/27)
 - LiteRT supports running inference on the device. The slides use local ranking as an architectural example. The privacy benefit depends on what actually leaves the device, including content requests or usage logs if present. [Google LiteRT](https://developers.google.com/edge/litert)

@@ -90,6 +90,7 @@
   function draw(slide) {
     const imageFile = photoFiles[slide.visual];
     const isHero = slide.layout === "hero";
+    presentation.classList.toggle("is-review", slide.layout === "quiz" || slide.layout === "references");
     const titleTag = isHero ? "h1" : "h2";
     const art = imageFile
       ? `<div class="art" aria-hidden="true"><img src="assets/images/${imageFile}.webp" alt=""></div>`
@@ -101,7 +102,7 @@
       ${art}<div class="copy enter"><${titleTag} id="slide-title">${slide.title}</${titleTag}>
       ${slide.subtitle ? `<p>${slide.subtitle}</p>` : ""}</div>${credits}</section>`;
     const initDemo = window.DeckDemos[slide.visual];
-    if (initDemo) initDemo(slideRoot.querySelector(".demo"));
+    if (initDemo) initDemo(slideRoot.querySelector(".demo, .quiz-sheet"));
     mirrorControls();
     fit();
   }
@@ -195,9 +196,9 @@
       if (event.key.toLowerCase() === "o") overview.close();
       return;
     }
-    const focusedButton = event.target instanceof Element && event.target.closest("button");
+    const focusedControl = event.target instanceof Element && event.target.closest("button, a[href]");
     const key = event.key.toLowerCase();
-    if (focusedButton && (key === " " || key === "enter")) return;
+    if (focusedControl && (key === " " || key === "enter")) return;
     switch (key) {
       case "arrowright":
       case " ":
@@ -280,7 +281,7 @@
   });
 
   stage.addEventListener("pointerdown", (event) => {
-    if (event.pointerType !== "touch" || !event.isPrimary || event.target.closest("button")) return;
+    if (event.pointerType !== "touch" || !event.isPrimary || event.target.closest("button, a[href]")) return;
     swipe = { id: event.pointerId, x: event.clientX, y: event.clientY };
     stage.setPointerCapture(event.pointerId);
   });
@@ -298,4 +299,3 @@
     preloader.src = `assets/images/${file}.webp`;
   });
 })();
-
