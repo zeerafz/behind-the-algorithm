@@ -1,30 +1,29 @@
-# المصادر والتحقّق
+# Sources and evidence limits
 
-## الهندسة العكسية · الشرائح 6–16
+## Reverse engineering · Slides 6–16
 
-- يغطي دليل OWASP طرق فحص بنية تطبيقات الموبايل والكود والسلوك وقت التشغيل والشبكة. سجلات الأحداث والكود في العرض أمثلة مكتوبة لتطبيق تجريبي. [OWASP MASTG](https://mas.owasp.org/MASTG/techniques/)
-- يشرح Oracle تحويل ملفات Java إلى ملفات class. توثّق AOSP تنفيذ DEX عبر ART ودعم الترجمة المسبقة والترجمة أثناء التشغيل. [Oracle javac](https://docs.oracle.com/en/java/javase/25/docs/specs/man/javac.html) · [Android Runtime](https://source.android.com/docs/core/runtime)
-- يعيد JADX بناء كود شبيه بجافا من ملفات Android التنفيذية، مع حدود في الاسترجاع. يتيح Frida مراقبة سلوك وقت التشغيل. يعتمد فحص HTTPS عبر mitmproxy على ثقة التطبيق أو عميل الاختبار بالشهادة. [JADX](https://github.com/skylot/jadx) · [Frida](https://frida.re/docs/home/) · [mitmproxy](https://docs.mitmproxy.org/stable/concepts/certificates/)
+- OWASP covers static inspection, runtime analysis, and network traffic analysis for mobile apps. The code and event logs in the slides are examples written for a test app. [OWASP MASTG](https://mas.owasp.org/MASTG/techniques/)
+- Oracle documents how javac compiles Java source into class files. AOSP documents DEX execution in Android Runtime and its support for ahead-of-time and just-in-time compilation. [Oracle javac](https://docs.oracle.com/en/java/javase/25/docs/specs/man/javac.html) · [Android Runtime](https://source.android.com/docs/core/runtime)
+- JADX reconstructs Java-like code from Android executables, with limits on what it can recover. Frida supports runtime observation. Inspection of HTTPS content with mitmproxy depends on the test client trusting its certificate. [JADX](https://github.com/skylot/jadx) · [Frida](https://frida.re/docs/home/) · [mitmproxy](https://docs.mitmproxy.org/stable/concepts/certificates/)
 
-## التوصيات · الشرائح 17–31
+## Recommendations · Slides 17–31
 
-- يذكر TikTok وقت المشاهدة والإكمال والتخطّي والإعجاب والمشاركة، ومعلومات عن الفيديو والمستخدم. ويشرح بداية التوصيات عند اختيار اهتمامات أو تجاوز الاختيار. هذا وصف معلن من الشركة. [How TikTok recommends content](https://support.tiktok.com/en/using-tiktok/exploring-videos/how-tiktok-recommends-content)
-- توضح مصادر Google المراحل العامة للاسترجاع والتقييم وإعادة الترتيب. يوثّق Faiss البحث عن متجهات قريبة ومقايضة سرعة البحث ودقته. يرسم العرض 304 نقاط اصطناعية في بُعدين. البحث التقريبي يفحص أقرب خليّتين بحسب مركزيهما، والبحث الكامل يقارن كل النقاط. أوزان الترتيب ودرجات الاهتمام بيانات تعليمية. [Google Recommendation Systems](https://developers.google.com/machine-learning/recommendation/overview/types) · [Faiss](https://faiss.ai/)
-- تعرض ورقة Monolith بحثاً هندسياً من ByteDance في التوصيات الفورية وجداول Embedding. وصف For You العام وهذه الورقة لا يحددان خوارزمية الاسترجاع لكل إصدار أو إعداد إنتاجي من TikTok. [ByteDance Monolith](https://arxiv.org/abs/2209.07663)
+- TikTok lists watch time, completion, skips, likes, shares, and information about the content and viewer among its signals. It also describes starting recommendations for viewers who select interests or skip that step. This is the company’s public description. [How TikTok recommends content](https://support.tiktok.com/en/using-tiktok/exploring-videos/how-tiktok-recommends-content)
+- Google explains candidate generation, scoring, and reranking. Faiss documents vector search and its speed and accuracy tradeoffs. The demo shows 304 synthetic points in two dimensions. Approximate search checks the two cells with centers closest to the query. Exact search checks every point. Ranking weights and interest scores are illustrative. [Google Recommendation Systems](https://developers.google.com/machine-learning/recommendation/overview/types) · [Faiss](https://faiss.ai/)
+- ByteDance’s Monolith paper describes research on real-time recommendations and embedding tables. The paper and the public For You description leave the retrieval algorithm used in any particular production version or setting open. [ByteDance Monolith](https://arxiv.org/abs/2209.07663)
 
-### حدود ما أمكن التحقّق منه
+### Claims that remain unverified
 
-- تتضمّن الصور المرجعية أسماء حقول وادّعاءات عن **31 نموذجاً و58 متغيّراً**. لم تتوفّر تجربة قابلة للإعادة تثبت العدّ أو نطاقه، أو تثبت أن الحركة أو السطوع أو الشحن تغيّر ترتيب For You، أو أن وظائف مسمّاة تتنبأ بإعادة الفتح أو تتدخّل عند توقّع الخروج.
-- سياسة TikTok الأمريكية تذكر حالة البطارية وإيقاع الضغط على المفاتيح ضمن أمثلة البيانات التقنية، وإمكانية رفع بعض محتوى المستخدم أثناء الإنشاء. هذه صياغة تخص سياسة الخدمة في الولايات المتحدة. مصير نص رسالة خاصة حُذف قبل الإرسال ودور هذه الحقول في الترتيب يظلّان بحاجة إلى دليل مستقل. [TikTok US Privacy Policy](https://t.tiktok.com/legal/page/us/privacy-policy/en)
+- The reference screenshots include field names and claims about **31 models and 58 variables**. We found no reproducible test that confirms the counts or their scope, establishes that motion, brightness, or charging state affects For You ranking, or shows that the named functions predict when a viewer will reopen the app or intervene before an expected exit.
+- TikTok’s U.S. privacy policy names battery state and keystroke patterns as technical data and says some user content may be uploaded during creation. What happens to the text of an unsent private message that a viewer deletes, and whether these fields affect ranking, require independent evidence. [TikTok U.S. Privacy Policy](https://t.tiktok.com/legal/page/us/privacy-policy/en)
 
-## الإعلان والميكروفون · الشرائح 32–36
+## Ads and microphone access · Slides 32–36
 
-- يصف تقرير موظفي FTC تقنيات ربط الأجهزة بمعلومات مؤكدة مثل تسجيل الدخول أو باستدلال احتمالي من إشارات مثل عناوين IP المشتركة. قصة الخاتم افتراضية، وتسلسل الأحداث وحده لا يكشف سبب عرض الإعلان. [FTC Cross-Device Tracking Staff Report](https://www.ftc.gov/reports/cross-device-tracking-federal-trade-commission-staff-report-january-2017)
-- دراسة Panoptispy عام 2018 رصدت تسريبات وسائط ضمن عيّنة تطبيقات Android، من ضمنها صور وفيديو. لم تسجّل التجارب تسريب صوت. النتيجة محدودة بعيّنة ومنهجية الدراسة. دقة إعلان بحد ذاتها لا تثبت استخدام تسجيل صوتي، ولم نجد دليلاً عاماً مقنعاً على تسجيل المحادثات الخاصة بشكل روتيني لهذا الغرض. [Panoptispy](https://petsymposium.org/popets/2018/popets-2018-0030.php)
-- في شكواها النهائية لعام 2026، قالت FTC إن خدمة Active Listening التابعة لـ CMG لم تجمع أو تستخدم بيانات صوتية في الخدمة محل التحقيق. [FTC Final Complaint](https://www.ftc.gov/system/files/ftc_gov/pdf/2423029c4838cmgfinalcomplaint.pdf)
+- An FTC staff report describes linking devices through known signals such as a login or probabilistic signals such as shared IP addresses. The ring story is hypothetical. Its timeline alone cannot establish what caused the ad. [FTC Cross-Device Tracking Staff Report](https://www.ftc.gov/reports/cross-device-tracking-federal-trade-commission-staff-report-january-2017)
+- The 2018 Panoptispy study found leaks of images and video in a sample of Android apps. It recorded no audio leaks in its experiments, within the limits of the sample and method. An accurate ad by itself is insufficient evidence of recording. We found no convincing general evidence that major platforms routinely record private conversations to target ads. [Panoptispy](https://petsymposium.org/popets/2018/popets-2018-0030.php)
+- In its final 2026 complaint, the FTC said that CMG’s Active Listening service did not collect or use voice data for the service it investigated. [FTC Final Complaint](https://www.ftc.gov/system/files/ftc_gov/pdf/2423029c4838cmgfinalcomplaint.pdf)
 
-## خيارات الخصوصية · الشرائح 37–40
+## Privacy choices · Slides 37–40
 
-- تشرح Android وApple أذونات الحساسات ومؤشرات الكاميرا والميكروفون وخيارات المراجعة. الخيارات الفعلية تعتمد على إصدار النظام وإعداداته. [Android privacy controls](https://developer.android.com/training/permissions/explaining-access) · [Apple hardware access controls](https://support.apple.com/en-ca/guide/iphone/iph168c4bbd5/27/ios/27)
-- يدعم LiteRT تشغيل الاستدلال على الجهاز. رسم ترتيب التوصيات المحلي مثال معماري. أثر الخصوصية يتبع ما يخرج فعلياً من الجهاز، بما فيه طلبات المحتوى أو سجلات الاستخدام إذا وجدت. [Google LiteRT](https://developers.google.com/edge/litert)
-
+- Android and Apple document sensor permissions and microphone and camera indicators. The controls available to a viewer depend on the operating system version and settings. [Android privacy controls](https://developer.android.com/training/permissions/explaining-access) · [Apple hardware access controls](https://support.apple.com/en-ca/guide/iphone/iph168c4bbd5/27/ios/27)
+- LiteRT supports running inference on the device. The slides use local ranking as an architectural example. The privacy benefit depends on what actually leaves the device, including content requests or usage logs if present. [Google LiteRT](https://developers.google.com/edge/litert)
