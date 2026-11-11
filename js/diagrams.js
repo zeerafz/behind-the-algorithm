@@ -49,8 +49,8 @@
   }
 
   function label(value, x, y, options = {}) {
-    const { cls = "", color = ink, align = "middle", rtl = /[\u0600-\u06ff]/.test(value) } = options;
-    return `<text x="${x}" y="${y}" text-anchor="${align}" direction="${rtl ? "rtl" : "ltr"}" class="${cls}" fill="${color}">${value}</text>`;
+    const { cls = "", color = ink, align = "middle" } = options;
+    return `<text x="${x}" y="${y}" text-anchor="${align}" class="${cls}" fill="${color}">${value}</text>`;
   }
 
   function box(x, y, w, h, fill = dark, stroke = line, radius = 10) {
@@ -97,19 +97,18 @@
     return box(x, y, w, h, "#121b28", line, 12) +
       box(x + 1, y + 1, w - 2, 3, color, "none", 2) +
       icon(glyph, x + w / 2, y + h * .36, h * .26, color) +
-      label(title, x + w / 2, y + h * .74, { cls: "big" }) +
+      label(title, x + w / 2, y + h * .74, { cls: "node-title" }) +
       (small ? label(small, x + w / 2, y + h * .89, { cls: "tiny mono", color: muted }) : "");
   }
 
-  function sequence(items, accessibleLabel, { w = 1260, h = 440, rtl = true } = {}) {
+  function sequence(items, accessibleLabel, { w = 1260, h = 440 } = {}) {
     const span = (w - 110) / items.length;
     const tileWidth = Math.min(span - 46, 258);
     const ys = h * .25;
     const height = h * .46;
-    const positions = items.map((_, i) => 55 + span * (rtl ? items.length - i - .5 : i + .5));
+    const positions = items.map((_, i) => 55 + span * (i + .5));
+    const offset = tileWidth / 2 + 7;
     const connectors = positions.slice(1).map((x, i) => {
-      const direction = rtl ? -1 : 1;
-      const offset = direction * (tileWidth / 2 + 7);
       return arrow(`M${positions[i] + offset} ${ys + height / 2}H${x - offset}`, i % 2 ? red : cyan, true, `${2.4 + i * .18}s`, `${i * .4}s`);
     }).join("");
     const tiles = items.map(([glyph, title, color, small], i) =>
@@ -157,7 +156,7 @@
     label("00:10", 425, 201, { cls: "mono big", color: muted }) +
     path("M425 221v40m-8-9 8 9 8-9", cyan) +
     `<g class="time-second">${label("02:00", 425, 369, { cls: "display", color: red })}</g>`,
-  "جلسة افتراضية تبدأ بعشر دقائق وتمتد إلى ساعتين");
+  "An illustrative session grows from ten minutes to two hours");
 
   visual.agency = () => {
     const edges = [[505, 273, 615, 133], [505, 273, 718, 212], [505, 273, 640, 352],
@@ -165,38 +164,38 @@
     return canvas(850, 550, frame(850, 550) + circle(514, 273, 253, "url(#halo)") +
       edges.map(([a, b, c, d]) => path(`M${a} ${b}L${c} ${d}`, "#5c536f", 2) + circle(c, d, 7, red)).join("") +
       arrow("M297 238H469", cyan, true) + arrow("M467 307H297", red, true, "3.1s", ".5s") +
-      badge("users", 200, 274, "إنت", cyan, 82) + badge("cpu", 540, 274, "الخوارزمية", red, 69),
-    "الشخص يختار كيف يتفاعل والنظام يختار ما يعرض");
+      badge("users", 200, 274, "You", cyan, 82) + badge("cpu", 540, 274, "Algorithm", red, 69),
+    "The viewer chooses how to respond and the system chooses what to show");
   };
 
   visual.agenda = () => sequence([
-    ["layers", "الهندسة العكسية", cyan, "REVERSE ENGINEERING"],
-    ["target", "نظام التوصيات", "#c5afff", "RECOMMENDATIONS"],
-    ["shield", "الخصوصية الرقمية", red, "DIGITAL PRIVACY"]
-  ], "ثلاث محطات في العرض");
+    ["layers", "Reverse engineering", cyan],
+    ["target", "Recommendations", "#c5afff"],
+    ["shield", "Digital privacy", red]
+  ], "Three topics in the presentation");
 
-  function lane(y, color, heading, items, rtl = true) {
-    const xs = rtl ? [1050, 630, 210] : [210, 630, 1050];
-    const d = rtl ? -1 : 1;
+  function lane(y, color, heading, items, reverse = false) {
+    const xs = reverse ? [1050, 630, 210] : [210, 630, 1050];
+    const d = reverse ? -1 : 1;
     return box(38, y - 46, 1184, 159, "#101925", "#2a3d53", 12) +
-      label(heading, 1190, y - 11, { align: /[\u0600-\u06ff]/.test(heading) ? "start" : "end", cls: "small", color }) +
+      label(heading, 70, y - 11, { align: "start", cls: "small", color }) +
       xs.slice(1).map((x, i) => arrow(`M${xs[i] + d * 127} ${y + 43}H${x - d * 127}`, color, true, "3.1s", `${i * .4}s`)).join("") +
       items.map(([glyph, title], i) => box(xs[i] - 113, y + 11, 226, 64, "#142131", "#41566f", 8) +
-        icon(glyph, xs[i] - 77, y + 43, 26, color) + label(title, xs[i] + 17, y + 52)).join("");
+        icon(glyph, xs[i] - 77, y + 43, 26, color) + label(title, xs[i] + 17, y + 50, { cls: "small" })).join("");
   }
 
   visual.engineering = () => canvas(1260, 430, frame(1260, 430) +
-    lane(66, cyan, "الهندسة", [["idea", "فكرة"], ["design", "تصميم"], ["app", "تطبيق"]]) +
-    lane(275, red, "الهندسة العكسية", [["app", "تطبيق"], ["search", "فحص"], ["idea", "فهم"]], false),
-  "في الهندسة ننطلق من الفكرة وفي الهندسة العكسية ننطلق من المنتج");
+    lane(66, cyan, "Engineering", [["idea", "Idea"], ["design", "Design"], ["app", "App"]]) +
+    lane(275, red, "Reverse engineering", [["app", "App"], ["search", "Inspect"], ["idea", "Understand"]], true),
+  "Engineering starts with an idea. Reverse engineering starts with the finished product");
 
   visual.reverse = () => {
-    const items = [["app", "التطبيق"], ["layers", "ملفات التنفيذ"], ["file", "كود مُعاد بناؤه"], ["search", "التحليل"], ["check", "النتائج"]];
-    const xs = [1115, 871, 630, 389, 145];
+    const items = [["app", "App"], ["layers", "App binaries"], ["file", "Rebuilt code"], ["search", "Analysis"], ["check", "Findings"]];
+    const xs = [145, 389, 630, 871, 1115];
     return canvas(1260, 435, frame(1260, 435) +
-      xs.slice(1).map((x, i) => arrow(`M${xs[i] - 71} 201H${x + 71}`, i < 2 ? cyan : red, true, "3.1s", `${i * .45}s`)).join("") +
-      items.map(([glyph, title], i) => `<g class="build-piece" style="--delay:${i * 115}ms;--from-x:${(4 - i) * 13}px">${badge(glyph, xs[i], 201, title, i < 3 ? cyan : red)}</g>`).join(""),
-    "مراحل فحص تطبيق من الملف التنفيذي حتى اختبار النتائج");
+      xs.slice(1).map((x, i) => arrow(`M${xs[i] + 71} 201H${x - 71}`, i < 2 ? cyan : red, true, "3.1s", `${i * .45}s`)).join("") +
+      items.map(([glyph, title], i) => `<g class="build-piece" style="--delay:${i * 115}ms;--from-x:${(i - 4) * 13}px">${badge(glyph, xs[i], 201, title, i < 3 ? cyan : red)}</g>`).join(""),
+    "Steps for inspecting an app from its binaries to tested findings");
   };
 
   visual.contract = () => canvas(850, 550, circle(410, 270, 270, "url(#halo)") +
@@ -207,26 +206,26 @@
     `</g>` + circle(507, 315, 113, "#16212bd9", cyan, 'stroke-width="3"') +
     path("M588 399l102 101", cyan, 13) +
     path("M440 310h135m-123 23h111", red, 4),
-  "عدسة تكبّر بنداً في عقد");
+  "A magnifying glass highlights a clause in a contract");
 
   visual.findings = () => sequence([
-    ["eye", "سلوك مخفي", cyan], ["bug", "ثغرات أمنية", red], ["lock", "الوصول للبيانات", "#c5afff"]
-  ], "أهداف فحص التطبيق");
+    ["eye", "Hidden behavior", cyan], ["bug", "Vulnerabilities", red], ["lock", "Data access", "#c5afff"]
+  ], "What an app inspection can uncover");
 
   visual.layers = () => {
     const rows = [
-      [52, cyan, "AndroidManifest.xml", "تعريف التطبيق والأذونات"],
-      [151, "#c5afff", "classes.dex", "تعليمات DEX"],
-      [250, "#ffc37e", "lib/*.so", "مكتبات Native"],
-      [349, red, "res/ · assets/", "صور وواجهات وملفات"]
+      [52, cyan, "AndroidManifest.xml", "App declaration and permissions"],
+      [151, "#c5afff", "classes.dex", "DEX instructions"],
+      [250, "#ffc37e", "lib/*.so", "Native libraries"],
+      [349, red, "res/ · assets/", "Images, layouts, and other files"]
     ];
     return canvas(850, 540, frame(850, 540) + phone(94, 122, 168, 290, icon("app", 178, 265, 65, cyan)) +
       rows.map(([y, color, code, title], i) => path(`M263 265C320 265 320 ${y + 35} 384 ${y + 35}`, color, 2) +
         `<g class="build-piece" style="--delay:${i * 95}ms;--from-x:-75px">` +
         box(384, y, 412, 76, "#132131", line, 10) + box(384, y, 5, 76, color, "none", 2) +
         label(code, 408, y + 31, { cls: "mono", align: "start", color }) +
-        label(title, 772, y + 56, { cls: "small", align: "start", rtl: true, color: muted }) + `</g>`).join(""),
-    "مثال على الملفات الموجودة داخل APK");
+        label(title, 408, y + 56, { cls: "small", align: "start", color: muted }) + `</g>`).join(""),
+    "Example files inside an APK");
   };
 
   visual.runtime = () => {
@@ -240,8 +239,8 @@
     return canvas(1260, 435, frame(1260, 435) +
       row(67, "JAVA / JVM", ["Source", ".class bytecode", "JVM", "Machine code*"], cyan) +
       row(245, "ANDROID / ART", ["Java / Kotlin", "DEX bytecode", "ART", "Machine code*"], red) +
-      label("* التفسير أو الترجمة حسب بيئة التنفيذ", 1190, 401, { color: muted, cls: "small", align: "start" }),
-    "مساران مختلفان لكود جافا ولتنفيذ تطبيق أندرويد");
+      label("* The runtime may interpret or compile bytecode", 70, 401, { color: muted, cls: "small", align: "start" }),
+    "Two execution paths for Java programs and Android apps");
   };
 
   const exampleCode = [
@@ -259,13 +258,13 @@
     codePanel(737, 61, 465, 309, "Reconstructed.java", [
       ["void record() {", false], ["  boolean complete = true;", false],
       ["  log(\"playback\", complete);", true], ["}", false]
-    ], red), "مثال مبسط يربط تعليمات DEX بكود جافا معاد بناؤه");
+    ], red), "Simplified example of reconstructing Java-like code from DEX");
 
   visual.static = () => canvas(850, 540, frame(850, 540) +
     codePanel(95, 75, 660, 340, "Playback.kt", exampleCode, cyan) +
     box(548, 438, 207, 45, "#132331", line, 7) +
-    label("مسار إرسال محتمل", 651, 468, { cls: "small", color: cyan }),
-  "فحص دالة قد ترسل حدث مشاهدة دون تشغيل التطبيق");
+    label("Possible send path", 651, 468, { cls: "small", color: cyan }),
+  "Inspecting a function that might send a playback event");
 
   visual.dynamic = () => canvas(850, 540, frame(850, 540) +
     phone(93, 88, 210, 359, box(125, 161, 146, 187, "url(#screen)", line) +
@@ -273,7 +272,7 @@
     codePanel(475, 142, 323, 247, "Runtime · Lab", [
       ["video.finished", false], ["POST /events", true], ["HTTP 204", false]
     ], red),
-  "مراقبة التشغيل وطلب الشبكة على جهاز اختبار");
+  "Observing app execution and a network request on a test device");
 
   visual.comparison = () => canvas(1260, 445, frame(1260, 445) +
     label("Static Analysis", 313, 61, { cls: "mono big", color: cyan }) +
@@ -285,17 +284,17 @@
     codePanel(900, 124, 307, 228, "Network trace", [
       ["POST /events", true], ["type: playback", false], ["HTTP 204", false]
     ], red),
-  "الكود يكشف المسار المحتمل ومراقبة التشغيل تظهر الطلب في التجربة");
+  "Code inspection reveals a possible path and a runtime test captures the request");
 
   visual.api = () => canvas(1260, 440, frame(1260, 440) +
     phone(92, 67, 170, 307, icon("app", 177, 220, 70, cyan)) +
-    badge("server", 1080, 219, "السيرفر", red, 78) +
+    badge("server", 1080, 219, "Server", red, 78) +
     arrow("M290 166H973", cyan, true, "3.3s") +
     arrow("M973 279H290", red, true, "3.3s", ".7s") +
     label("POST /events", 630, 136, { cls: "mono", color: cyan }) +
     label("HTTP 204", 630, 319, { cls: "mono", color: red }) +
     badge("lock", 630, 223, "", muted, 31),
-  "مثال تعليمي لطلب HTTPS من الهاتف ورد من السيرفر");
+  "Example HTTPS request from a phone and response from a server");
 
   function card(x, y, w, h, title, color) {
     return box(x, y, w, h, color === red ? "url(#heat)" : "url(#screen)", "#47627c", 12) +
@@ -305,7 +304,7 @@
   }
 
   visual.feed = () => {
-    const cards = [["ذكاء اصطناعي", cyan], ["طبخ", red], ["ألعاب", "#c5afff"], ["ذكاء اصطناعي", cyan], ["طبخ", red]];
+    const cards = [["AI", cyan], ["Cooking", red], ["Gaming", "#c5afff"], ["AI", cyan], ["Cooking", red]];
     return canvas(850, 550, frame(850, 550) + circle(428, 270, 275, "url(#halo)") +
       orbit(431, 274, 235, cyan) + orbit(431, 274, 181, cyan) +
       path("M194 190H309m231 116h115m-495 88h142m238-260h152", "#46637e", 2) +
@@ -313,17 +312,17 @@
       phone(299, 36, 263, 474, `<defs><clipPath id="feed-window"><rect x="318" y="77" width="225" height="395" rx="8"/></clipPath></defs>
         <g clip-path="url(#feed-window)"><g class="feed-cards">
         ${cards.map(([name, color], i) => card(324, 83 + i * 175, 213, 164, name, color)).join("")}</g></g>`),
-    "موجز فيديوهات عمودي متغير");
+    "A scrolling feed of vertical videos");
   };
 
   visual.signals = () => {
-    const sig = [["timer", "وقت المشاهدة"], ["check", "إكمال"], ["skip", "تخطّي"], ["heart", "إعجاب"], ["share", "مشاركة"], ["replay", "إعادة"]];
+    const sig = [["timer", "Watch time"], ["check", "Completion"], ["skip", "Skip"], ["heart", "Like"], ["share", "Share"], ["replay", "Replay"]];
     return canvas(1260, 440, frame(1260, 440) + sig.map(([glyph, title], i) => {
-      const x = 1020 - (i % 3) * 390;
+      const x = 240 + (i % 3) * 390;
       const y = 85 + Math.floor(i / 3) * 198;
       return circle(x, y, 47, "#18283a", i < 3 ? cyan : "#c5afff") +
         icon(glyph, x, y, 37, i < 3 ? cyan : "#c5afff") + label(title, x, y + 92, { cls: "big" });
-    }).join(""), "أمثلة لإشارات المشاهدة والإكمال والتخطي والتفاعل");
+    }).join(""), "Examples of viewing and interaction signals");
   };
 
   visual.evidence = () => canvas(850, 540, frame(850, 540) +
@@ -331,24 +330,24 @@
       ["field: playback_event", false], ["build: demo-1", false], ["test: replay with logging", true], ["result: compare requests", false]
     ], cyan) + circle(588, 308, 94, "#142532eb", red, 'stroke-width="3"') +
     icon("search", 588, 308, 74, red) +
-    label("شو بنقدر نعيد ونقيس؟", 425, 451, { cls: "big", color: muted }),
-  "لقطة تظهر أسماء حقول وتحتاج تجربة قابلة للتكرار");
+    label("What can we reproduce and measure?", 425, 451, { cls: "big", color: muted }),
+  "A screenshot shows field names. A repeatable test can establish what they do");
 
   visual.prediction = () => sequence([
-    ["play", "تفاعل", cyan], ["sliders", "خصائص", "#a8d1ff"], ["cpu", "نموذج", "#c5afff"], ["target", "توقّع", red]
-  ], "أحداث التفاعل تتحول إلى خصائص يستعملها نموذج للتوقع");
+    ["play", "Interaction", cyan], ["sliders", "Features", "#a8d1ff"], ["cpu", "Model", "#c5afff"], ["target", "Prediction", red]
+  ], "Interactions become features that a model uses to make predictions");
 
   visual.loop = () => {
-    const corners = [[972, 111], [972, 331], [288, 331], [288, 111]];
-    const geometry = ["M972 159V280", "M916 331H345", "M288 282V161", "M344 111H916"];
-    const stages = [["play","بتحضر"],["chart","بتتسجّل إشارة"],["cpu","بتتغيّر التوقعات"],["target","بيطلع فيديو جديد"]];
+    const corners = [[288, 111], [972, 111], [972, 331], [288, 331]];
+    const geometry = ["M344 111H916", "M972 159V280", "M916 331H345", "M288 282V161"];
+    const stages = [["play","Watch a video"],["chart","Record a signal"],["cpu","Update predictions"],["target","Show the next video"]];
     return canvas(1260, 445, frame(1260, 445) +
       geometry.map((d, i) => arrow(d, i % 2 ? red : cyan, true, "2.6s", `${i * .31}s`)).join("") +
       corners.map(([x, y], i) => box(x - 56, y - 46, 112, 92, "#162334", i % 2 ? red : cyan, 15) +
         icon(stages[i][0], x, y, 43, i % 2 ? red : cyan) +
-        label(stages[i][1], x, y + (i === 1 || i === 2 ? 83 : -64), { cls: "small" })).join("") +
+        label(stages[i][1], x, y + (i >= 2 ? 83 : -64), { cls: "small" })).join("") +
       circle(630, 224, 129, "url(#halo)") + icon("replay", 630, 221, 83, cyan),
-    "حلقة متكررة من المشاهدة إلى الإشارة والتوقع وعرض فيديو جديد");
+    "A feedback loop links viewing, signals, predictions, and new recommendations");
   };
 
   visual.scale = () => {
@@ -359,81 +358,81 @@
     }).join("");
     return canvas(1260, 435, frame(1260, 435) + field +
       circle(654, 215, 173, "url(#halo)") + orbit(654, 215, 86, cyan) + orbit(654, 215, 55, cyan) +
-      icon("search", 654, 215, 58, cyan), "تمثيل اصطناعي لمكتبة فيديوهات كبيرة");
+      icon("search", 654, 215, 58, cyan), "A synthetic representation of a large video library");
   };
 
   visual.embedding = () => canvas(850, 540, frame(850, 540) +
-    card(75, 144, 215, 226, "فيديو", cyan) +
+    card(75, 144, 215, 226, "Video", cyan) +
     arrow("M305 259H448", cyan, true) +
     box(465, 152, 305, 214, "#142130", line, 12) +
     label("VECTOR", 618, 208, { cls: "mono", color: cyan }) +
     label("[ .62, −.31, .74, … ]", 618, 270, { cls: "mono" }) +
-    label("أرقام بتمثّل الفيديو", 618, 327, { cls: "small", color: muted }),
-  "تحويل فيديو إلى متجه أرقام توضيحي");
+    label("Numbers representing the video", 618, 327, { cls: "small", color: muted }),
+  "A video represented as a vector of numbers");
 
   visual.cold = () => canvas(1260, 440, frame(1260, 440) +
-    badge("users", 978, 216, "مستخدم جديد", cyan, 79) +
-    arrow("M890 191C812 191 793 110 670 110", cyan, true) +
-    arrow("M890 244C812 244 793 326 670 326", red, true) +
-    node(370, 37, 282, 149, "sliders", "اهتمامات مختارة", cyan) +
-    node(370, 248, 282, 149, "play", "محتوى رائج", red) +
-    arrow("M357 110C263 110 253 211 179 211", cyan) +
-    arrow("M357 326C263 326 253 234 179 234", red) +
-    badge("phone", 122, 222, "أول توصيات", "#c5afff", 45),
-  "التوصيات الأولى قد تبدأ بمواضيع مختارة أو بمحتوى رائج");
+    badge("users", 282, 216, "New viewer", cyan, 79) +
+    arrow("M370 191C448 191 467 110 590 110", cyan, true) +
+    arrow("M370 244C448 244 467 326 590 326", red, true) +
+    node(608, 37, 282, 149, "sliders", "Chosen interests", cyan) +
+    node(608, 248, 282, 149, "play", "Popular content", red) +
+    arrow("M903 110C997 110 1007 211 1081 211", cyan) +
+    arrow("M903 326C997 326 1007 234 1081 234", red) +
+    badge("phone", 1138, 222, "First picks", "#c5afff", 45),
+  "First recommendations can start with chosen topics or popular content");
 
   visual.objective = () => canvas(1260, 440, frame(1260, 440) +
-    badge("check", 235, 131, "احتمال الإكمال", cyan, 49) +
-    badge("share", 630, 131, "احتمال المشاركة", "#c5afff", 49) +
-    badge("chart", 1025, 131, "درجة الترتيب", red, 49) +
+    badge("check", 235, 131, "Completion chance", cyan, 49) +
+    badge("share", 630, 131, "Share chance", "#c5afff", 49) +
+    badge("chart", 1025, 131, "Ranking score", red, 49) +
     path("M235 229V270M630 229V270M1025 229V270", line) +
     box(121, 270, 1018, 104, "#142030", "#47607d", 13) +
     label("Score = w₁ × P(Complete) + w₂ × P(Share)", 630, 332, { cls: "mono big", color: ink }),
-  "معادلة اصطناعية تجمع احتمالي الإكمال والمشاركة بأوزان");
+  "A sample equation combines completion and sharing probabilities");
 
   visual.pipeline = () => sequence([
-    ["play", "تفاعل", cyan], ["sliders", "خصائص", "#a8d1ff"],
-    ["filter", "استرجاع", "#c5afff"], ["chart", "ترتيب", "#ffbc83"], ["phone", "عرض", red]
-  ], "التفاعل والخصائص واسترجاع المرشحين وترتيبهم ثم عرضهم");
+    ["play", "Interaction", cyan], ["sliders", "Features", "#a8d1ff"],
+    ["filter", "Retrieval", "#c5afff"], ["chart", "Ranking", "#ffbc83"], ["phone", "Display", red]
+  ], "Interaction, features, retrieval, ranking, and display");
 
   visual.rings = () => canvas(1260, 445, frame(1260, 445) +
-    phone(956, 69, 205, 306, icon("search", 1058, 196, 53, cyan) +
-      label("B", 1058, 270, { cls: "mono", color: cyan })) +
-    phone(97, 69, 205, 306, icon("ring", 199, 196, 61, red) +
-      label("A", 199, 270, { cls: "mono", color: red })) +
+    phone(97, 69, 205, 306, icon("search", 199, 196, 53, cyan) +
+      label("B", 199, 270, { cls: "mono", color: cyan })) +
+    phone(956, 69, 205, 306, icon("ring", 1058, 196, 61, red) +
+      label("A", 1058, 270, { cls: "mono", color: red })) +
     path("M932 220H736M524 220H326", "#71869f", 2, 'stroke-dasharray="6 8"') +
-    label("لاحقاً", 425, 204, { cls: "small", color: muted }) +
-    badge("message", 630, 220, "حديث عن خاتم", "#c5afff", 64) +
-    label("بحث عن خاتم", 1058, 417, { cls: "small" }) +
-    label("ظهر إعلان", 199, 417, { cls: "small" }),
-  "تسلسل افتراضي يبدأ ببحث على جهاز وينتهي بإعلان على جهاز آخر");
+    label("Later", 835, 204, { cls: "small", color: muted }) +
+    badge("message", 630, 220, "Discussed a ring", "#c5afff", 64) +
+    label("Searched for a ring", 199, 417, { cls: "small" }) +
+    label("Saw a ring ad", 1058, 417, { cls: "small" }),
+  "A hypothetical search on one device precedes an ad on another");
 
   visual.adgraph = () => {
-    const sources = [["wifi","شبكة مشتركة"],["users","حساب أو معرّف"],["search","سجل التصفّح"],["chart","بيانات المعلن"]];
+    const sources = [["wifi","Shared network"],["users","Account or ID"],["search","Browsing history"],["chart","Advertiser data"]];
     return canvas(1260, 445, frame(1260, 445) +
       sources.map(([glyph, title], i) => {
         const y = 62 + i * 106;
-        return arrow(`M914 ${y}C805 ${y} 799 223 723 223`, i % 2 ? cyan : "#a69fe9", true, `${2.2 + i * .4}s`) +
-          box(928, y - 32, 264, 64, "#142233", line, 7) +
-          icon(glyph, 966, y, 26, cyan) + label(title, 1165, y + 8, { align: "start" });
+        return arrow(`M346 ${y}C455 ${y} 461 223 537 223`, i % 2 ? cyan : "#a69fe9", true, `${2.2 + i * .4}s`) +
+          box(68, y - 32, 264, 64, "#142233", line, 7) +
+          icon(glyph, 106, y, 26, cyan) + label(title, 140, y + 8, { align: "start" });
       }).join("") +
-      badge("cpu", 630, 223, "استنتاج احتمالي", "#c5afff", 70) +
-      arrow("M542 223H301", red, true) + badge("ring", 210, 223, "إعلان محتمل", red, 71),
-    "إشارات قد يستعملها نظام إعلاني ليستنتج اهتماماً ويختار إعلاناً");
+      badge("cpu", 630, 223, "Inferred interest", "#c5afff", 70) +
+      arrow("M718 223H959", red, true) + badge("ring", 1050, 223, "Possible ad", red, 71),
+    "Signals an ad system may use to infer an interest and choose an ad");
   };
 
   visual.mic = () => canvas(850, 540, frame(850, 540) +
     circle(425, 260, 260, "url(#halo)") +
     [92, 127, 169, 215].map((r) => orbit(425, 262, r, cyan)).join("") +
     badge("mic", 425, 262, "", cyan, 79) +
-    label("؟", 605, 163, { cls: "display", color: red }) +
+    label("?", 605, 163, { cls: "display", color: red }) +
     path("M70 299h37l12-19 14 42 16-62 16 39h35m450 0h35l16-39 16 62 14-42 12 19h37", "#587694", 2),
-  "سؤال حول الوصول إلى الميكروفون");
+  "A question about microphone access");
 
   visual.proof = () => canvas(1260, 445, frame(1260, 445) +
-    lane(65, cyan, "استنتاج من نشاط", [["search", "نشاط"], ["cpu", "استنتاج"], ["target", "إعلان"]]) +
-    lane(277, red, "أدلة على استخدام الصوت", [["mic", "وصول للمايك"], ["file", "التقاط صوت"], ["target", "ربط بالإعلان"]]),
-  "مسار الاستنتاج من النشاط ومسار إثبات ربط الصوت بالإعلان");
+    lane(65, cyan, "Inference from activity", [["search", "Activity"], ["cpu", "Inference"], ["target", "Ad"]]) +
+    lane(277, red, "Evidence of audio use", [["mic", "Mic access"], ["file", "Audio capture"], ["target", "Link to the ad"]]),
+  "Two paths show activity-based inference and the evidence required to link audio to an ad");
 
   visual.footprint = () => {
     const random = seeded(14);
@@ -442,42 +441,42 @@
       orbit(425, 274, 213, cyan) + orbit(425, 274, 182, cyan) +
       icon("fingerprint", 425, 274, 315, cyan) +
       [[210, 197], [583, 157], [566, 423], [210, 363]].map(([x,y]) => circle(x,y,5,red)).join(""),
-    "أثر رقمي مرسوم على شكل بصمة");
+    "A fingerprint represents a digital footprint");
   };
 
   visual.privacy = () => sequence([
-    ["lock", "راجع الأذونات", cyan, "MIC · CAMERA · LOCATION"],
-    ["sliders", "حدّ التتبّع", "#c5afff", "TRACKING · ADS"],
-    ["shield", "حدّث جهازك", red, "SYSTEM · APPS"]
-  ], "خطوات لتقليل الوصول والتتبع");
+    ["lock", "Review permissions", cyan, "MIC · CAMERA · LOCATION"],
+    ["sliders", "Limit tracking", "#c5afff", "TRACKING · ADS"],
+    ["shield", "Update your device", red, "SYSTEM · APPS"]
+  ], "Steps to reduce access and tracking");
 
   function system(local) {
     if (!local) return sequence([
-      ["phone", "الجهاز", cyan], ["wifi", "إرسال الإشارات", "#a8d1ff"], ["server", "السيرفر", red], ["target", "توصية", "#c5afff"]
-    ], "الهاتف يرسل الإشارات ويستقبل توصية محسوبة على السيرفر");
+      ["phone", "Device", cyan], ["wifi", "Send signals", "#a8d1ff"], ["server", "Server", red], ["target", "Recommendation", "#c5afff"]
+    ], "The device sends signals and receives a recommendation computed on a server");
     return canvas(1260, 445, frame(1260, 445) +
       box(163, 56, 934, 338, "#132331", cyan, 22) +
-      label("داخل الجهاز", 1055, 102, { align: "start", color: cyan }) +
+      label("Inside the device", 205, 102, { align: "start", color: cyan }) +
       box(610, 70, 40, 5, "#587590", "none", 2) +
-      arrow("M840 230H710", cyan, true) + arrow("M550 230H420", cyan, true) +
-      badge("chart", 908, 230, "إشارات محليّة", cyan, 56) +
-      badge("cpu", 630, 230, "نموذج محلي", "#c5afff", 56) +
-      badge("target", 352, 230, "توصية", red, 56),
-    "التوصية محسوبة داخل الجهاز في هذا التصميم");
+      arrow("M420 230H550", cyan, true) + arrow("M710 230H840", cyan, true) +
+      badge("chart", 352, 230, "Local signals", cyan, 56) +
+      badge("cpu", 630, 230, "Local model", "#c5afff", 56) +
+      badge("target", 908, 230, "Recommendation", red, 56),
+    "The device computes the recommendation locally");
   }
 
   visual.cloud = () => system(false);
   visual.local = () => system(true);
   visual.architecture = () => canvas(1260, 445, frame(1260, 445) +
-    lane(65, red, "Cloud Processing", [["phone","الجهاز"],["server","نموذج بعيد"],["target","توصية"]]) +
-    lane(276, cyan, "On-Device Processing", [["chart","إشارات محليّة"],["cpu","نموذج محلي"],["target","توصية"]]) +
+    lane(65, red, "Cloud Processing", [["phone","Device"],["server","Remote model"],["target","Recommendation"]]) +
+    lane(276, cyan, "On-Device Processing", [["chart","Local signals"],["cpu","Local model"],["target","Recommendation"]]) +
     box(52, 277, 1156, 88, "none", `${cyan}b0`, 10),
-  "في المعالجة السحابية يخرج الطلب من الجهاز وفي المعالجة المحلية يحصل الترتيب داخله");
+  "Cloud processing sends a request to a server. Local processing ranks on the device");
 
   visual.thanks = () => canvas(1448, 716, circle(724, 351, 329, "url(#halo)") +
     orbit(724, 351, 272, "#5a7795") + orbit(724, 351, 241, "#5a7795") +
     path("M122 351h247m711 0h247", line) +
-    circle(369, 351, 4, red) + circle(1080, 351, 4, red), "دوائر حول رسالة الشكر");
+    circle(369, 351, 4, red) + circle(1080, 351, 4, red), "Circles frame the thank-you slide");
 
   window.DeckDiagrams = { visual, canvas, frame, label, box, circle, path, arrow, icon, badge, card, seeded, swatches, red, cyan, ink, muted, line };
 })();
