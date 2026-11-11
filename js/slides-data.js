@@ -78,10 +78,6 @@
       "Some ad systems draw on browsing history, advertiser data, or shared accounts. They may link devices through a known login or infer a link from repeated signals such as a shared IP address, depending on the data, settings, and permissions. Proximity alone can’t establish that identities were linked or exchanged."],
     [3, "Is my phone<br>listening?", "split", "mic", "Check your microphone permission",
       "Microphone access can support a call or a video with sound, and it can also be misused. Recent Android versions let you check the microphone indicator and privacy dashboard. Seeing an ad for something you discussed is insufficient evidence that the microphone was activated."],
-    [3, "How might two devices be linked?", "wide", "sharedNetwork", "Scene 1 · The espresso machine ad",
-      "Your friend searches for an espresso machine. Your phone later shows an ad, although you didn’t search for one. A shared network or recurring location can contribute to an inferred connection. This screenshot is hypothetical. Its two-hour interval and retargeting explanation are illustrative. Shared Wi-Fi alone can’t establish a household link or explain why a specific ad appeared."],
-    [3, "What can an app observe?", "wide", "behaviorLog", "Scene 2 · Scrolling, replays, and pauses",
-      "The screenshot illustrates possible behavioral events and example measurements. An app can measure playback duration or record that you opened the comments. A replay, pause, or swipe can be a signal for a model. The example’s numbers are invented, and a pause alone doesn’t identify your intent or the object you were looking at. These events offer ways to infer interest without audio."],
     [3, "What evidence would we need?", "wide", "proof", "A relevant ad alone cannot establish microphone use",
       "Inferring interest from activity and using recorded audio are different claims. To establish audio-based targeting, look for evidence of microphone access, recorded content, and a link to the ad. The Panoptispy study found image and video leaks in its sample. In 2026, the FTC’s complaint about Active Listening said the investigated service did not use voice data. We found no convincing general evidence that major platforms routinely record private conversations to target ads."],
     [3, "Every interaction can leave a trace", "split", "footprint", "",
@@ -104,7 +100,7 @@
     [5, "Quiz 2 · Ads and privacy", "quiz", "quizPrivacy", "",
       "Ask viewers to explain their choices. Answers: 6 C, shared Wi-Fi is one possible linking signal. 7 D, captured audio has to be traced to ad selection. 8 A, the log shows two clip lengths of playback. 9 B, ranking can use viewing history kept on the device. 10 C, the viewer’s reaction becomes a signal for future recommendations."],
     [5, "References", "references", "references", "Select a source to open it",
-      "Point viewers to the official documentation and studies. TikTok’s help page describes what the company publicly discloses. The FTC report explains possible device-linking methods, and Panoptispy documents observations from a sample of Android apps. Both screenshots were provided as illustrations. SOURCES.md includes more reading and the limits of the evidence."]
+      "Point viewers to the official documentation and studies. TikTok’s help page describes what the company publicly discloses. The FTC report explains possible device-linking methods, and Panoptispy documents observations from a sample of Android apps. SOURCES.md includes more reading and the limits of the evidence."]
   ].map(([chapter, title, layout, visual, subtitle, speakerNotes], index) => ({
     id: "slide-" + String(index + 1).padStart(2, "0"),
     chapter, title, layout, visual, subtitle, speakerNotes

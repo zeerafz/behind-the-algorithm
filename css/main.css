@@ -98,16 +98,6 @@ button:disabled { opacity: .27; cursor: default; }
   display: block; width: 100%; height: 100%; overflow: visible;
 }
 .wide[data-scene="engineering"] .visual { top: 280px; }
-.wide:is([data-scene="sharedNetwork"], [data-scene="behaviorLog"]) .visual { display: block; }
-.evidence-scene {
-  width: 100%; height: 100%; margin: 0;
-  display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 16px;
-  padding: 20px 24px 23px; background: #0b121c; border: 1px solid var(--line); border-radius: 16px;
-}
-.evidence-image { min-height: 0; }
-.evidence-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.evidence-scene figcaption { color: var(--muted); text-align: center; font-size: 22px; }
-
 .quiz .copy, .references .copy { inset: 112px 76px auto; }
 .quiz .copy h2, .references .copy h2 { font-size: 58px; }
 .quiz .visual { inset: 194px 76px 76px; }

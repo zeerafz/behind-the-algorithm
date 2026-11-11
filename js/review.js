@@ -52,25 +52,6 @@
     ]]
   ];
 
-  function scene(file, description, caption) {
-    return `<figure class="evidence-scene">
-      <div class="evidence-image"><img src="assets/images/${file}" alt="${description}"></div>
-      <figcaption>${caption}</figcaption>
-    </figure>`;
-  }
-
-  visual.sharedNetwork = () => scene(
-    "scene-device-linking.png",
-    "Two phones share a network or location. In this hypothetical example, an ad system infers a link and shows an espresso machine ad.",
-    "Hypothetical scenario. Shared Wi-Fi or location can be clues. Linking the devices or explaining the ad would take additional evidence."
-  );
-
-  visual.behaviorLog = () => scene(
-    "scene-behavior-signals.png",
-    "An example table links scrolling, skipping, replays, comments, and pausing to possible behavior signals.",
-    "Illustrative measurements. Playback time and comments opened can be logged. Intent and object focus require stronger evidence."
-  );
-
   function addQuiz(name, questions, start) {
     const selected = Array(questions.length).fill(null);
 
