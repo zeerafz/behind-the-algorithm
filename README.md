@@ -17,15 +17,15 @@ Download or clone the full project, then open `index.html` in a modern browser s
 | Slide overview | O or the grid button. Select a slide to jump to it. |
 | Speaker notes | N or the notes button. This opens notes over the presentation. |
 | Separate presenter window | P or **Open presenter window**. Move it to your own screen and share the main presentation window. |
-| Share a slide | Copy the address after opening the slide, for example `#slide-26`. |
+| Share a slide | Copy the address after opening the slide, for example `#slide-27`. |
 
 The toolbar also has buttons for mouse and touch navigation. When a button has focus, Enter and Space activate it. If your browser blocks the presenter window, allow the pop-up or use the notes panel. The diagrams are easiest to read with a phone held in landscape. Demo controls also appear below the slide on a portrait phone.
 
 ## Live demos
 
-- **26 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. Cooking shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
-- **28 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
-- **30 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
+- **27 · Approximate nearest neighbor search.** Pick a topic and compare approximate and exact search. Cooking shows how scanning only part of the index can miss a nearby match. Both modes use the same 304 synthetic points.
+- **29 · Learning from interactions.** Finish or skip a video to see an interest score change. Reset restores the starting scores.
+- **31 · Ranking.** Switch priority between completion and sharing to see the same candidates reorder.
 - **43–44 · Quizzes.** Choose answers to see immediate feedback. On a phone in portrait, scroll through the questions.
 
 ## GitHub Pages

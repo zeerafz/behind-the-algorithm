@@ -45,6 +45,8 @@
       "Think about the first video you see when you open the app. TikTok says For You ranking uses interactions, information about videos, and context such as language. Those examples come from the company’s public explanation. They don’t tell us how every model is built or why any individual video appeared."],
     [2, "Every interaction sends a signal", "wide", "signals", "",
       "How long did you watch? Did you finish, skip, like, or share? TikTok lists these signals in its explanation of For You and says interactions generally carry more weight. Replays are a general example for this talk. A long watch might mean interest or simply that the screen was left on. A single signal is noisy."],
+    [2, "Every interaction can leave a trace", "split", "footprint", "",
+      "A search, video view, or page visit can be logged, depending on the service and your settings. Ask who records it, why they collect it, who they share it with, and how long they keep it."],
     [2, "From screenshot to evidence", "split", "evidence", "Record the version. Reproduce the test.",
       "The reference screenshots list fields for motion, battery, brightness, typing, and predicted opens. TikTok’s U.S. privacy policy names battery state and typing patterns as examples of technical data. Their role in ranking would require a reproducible test of what was sent, when, and why. The claimed model and variable counts, transmission of deleted messages, and alleged exit-prevention function remain unverified."],
     [2, "From interaction to prediction", "wide", "prediction", "",
@@ -80,8 +82,6 @@
       "Microphone access can support a call or a video with sound, and it can also be misused. Recent Android versions let you check the microphone indicator and privacy dashboard. Seeing an ad for something you discussed is insufficient evidence that the microphone was activated."],
     [3, "What evidence would we need?", "wide", "proof", "A relevant ad alone cannot establish microphone use",
       "Inferring interest from activity and using recorded audio are different claims. To establish audio-based targeting, look for evidence of microphone access, recorded content, and a link to the ad. The Panoptispy study found image and video leaks in its sample. In 2026, the FTC’s complaint about Active Listening said the investigated service did not use voice data. We found no convincing general evidence that major platforms routinely record private conversations to target ads."],
-    [3, "Every interaction can leave a trace", "split", "footprint", "",
-      "A search, video view, or page visit can be logged, depending on the service and your settings. Ask who records it, why they collect it, who they share it with, and how long they keep it."],
 
     [4, "How can we protect our privacy?", "wide", "privacy", "",
       "Review microphone, camera, and location permissions. Limit access to when you use the app or turn off access it doesn’t need. Check the app’s privacy controls and limit ad personalization and tracking where available. Keep your system and apps up to date. A trusted tracker blocker can stop some network requests. System permissions and the app’s own data collection require separate attention."],
