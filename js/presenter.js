@@ -16,7 +16,6 @@
     const slide = slides[current];
     counter.textContent = `${String(current + 1).padStart(2, "0")} / ${slides.length}`;
     title.innerHTML = slide.title;
-    title.dir = ["hero", "quote"].includes(slide.layout) ? "ltr" : "rtl";
     notes.textContent = slide.speakerNotes;
     previous.disabled = current === 0;
     next.disabled = current === slides.length - 1;
@@ -39,8 +38,8 @@
   next.addEventListener("click", () => move(1));
   document.addEventListener("keydown", (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
-    if (event.key === "ArrowLeft" || event.key === "PageDown") move(1);
-    else if (event.key === "ArrowRight" || event.key === "PageUp") move(-1);
+    if (event.key === "ArrowRight" || event.key === "PageDown") move(1);
+    else if (event.key === "ArrowLeft" || event.key === "PageUp") move(-1);
     else return;
     event.preventDefault();
   });

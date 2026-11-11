@@ -4,10 +4,10 @@
   const { visual, canvas, frame, label, box, circle, path, arrow, icon, seeded, swatches, red, cyan, ink, muted, line } = window.DeckDiagrams;
 
   const categories = [
-    { title: "ذكاء اصطناعي", short: "ذكاء اصطناعي", x: 219, y: 100, dx: 64, dy: 35, color: swatches[0] },
-    { title: "طبخ", short: "طبخ", x: 420, y: 237, dx: 73, dy: 44, color: swatches[1] },
-    { title: "ألعاب", short: "ألعاب", x: 650, y: 113, dx: 69, dy: 33, color: swatches[2] },
-    { title: "رياضة", short: "رياضة", x: 818, y: 250, dx: 65, dy: 38, color: swatches[3] }
+    { title: "AI", short: "AI", x: 219, y: 100, dx: 64, dy: 35, color: swatches[0] },
+    { title: "Cooking", short: "Cooking", x: 420, y: 237, dx: 73, dy: 44, color: swatches[1] },
+    { title: "Gaming", short: "Gaming", x: 650, y: 113, dx: 69, dy: 33, color: swatches[2] },
+    { title: "Sports", short: "Sports", x: 818, y: 250, dx: 65, dy: 38, color: swatches[3] }
   ];
   const plot = { x: 30, y: 30, w: 900, h: 325, columns: 5, rows: 3 };
   const cellWidth = plot.w / plot.columns;
@@ -54,7 +54,7 @@
     const locations = [[185, 56], [354, 314], [694, 64], [828, 318]];
     return categories.map(({ short, color }, i) => {
       const [x, y] = locations[i];
-      const w = i === 0 ? 154 : 78;
+      const w = i === 0 ? 44 : 94;
       return box(x - w / 2, y - 20, w, 30, "#0e1725", `${color}66`, 5) +
         label(short, x, y + 1, { cls: "small", color });
     }).join("");
@@ -70,10 +70,10 @@
   }
 
   visual.clusters = () => plotCanvas(field() + categoryLabels(),
-    label("كل نقطة = فيديو", 1107, 96, { cls: "big" }) +
-    categories.map(({ title, color }, i) => circle(1199, 148 + 51 * i, 6, color) +
-      label(title, 1174, 155 + 51 * i, { cls: "small", align: "start", color: muted })).join(""),
-  "تمثيل تعليمي اصطناعي لفيديوهات متقاربة حسب تشابه تمثيلها الرقمي");
+    label("One dot = one video", 1107, 96, { cls: "node-title" }) +
+    categories.map(({ title, color }, i) => circle(1017, 148 + 51 * i, 6, color) +
+      label(title, 1041, 155 + 51 * i, { cls: "small", align: "start", color: muted })).join(""),
+  "Synthetic video embeddings grouped by similarity");
 
   visual.approximation = () => {
     const query = { x: 451, y: 192 };
@@ -82,11 +82,11 @@
       "#66e7f224", cyan, 0)).join("") + field() +
       neighbors.map(({x,y}) => circle(x, y, 8, "none", "#fff", 'stroke-width="1.6"')).join("") +
       circle(query.x, query.y, 7, cyan, "#fff", 'stroke-width="1.6"'),
-    label("بحث بخليّتين", 1107, 101, { cls: "big", color: cyan }) +
+    label("Search two cells", 1107, 101, { cls: "big", color: cyan }) +
     label(String(compared.length), 1107, 192, { cls: "display" }) +
-    label("مقارنة بهذا المثال", 1107, 233, { cls: "small", color: muted }) +
-    label(`من أصل ${points.length} نقطة`, 1107, 291, { cls: "small", color: muted }),
-    "بحث تقريبي يقارن النقاط في خليتين من الفهرس");
+    label("comparisons in this example", 1107, 233, { cls: "small", color: muted }) +
+    label(`out of ${points.length} points`, 1107, 291, { cls: "small", color: muted }),
+    "Approximate search compares points in two index cells");
   };
 
   const button = (action, text, pressed) =>
@@ -113,17 +113,17 @@
   function renderANN() {
     const chart = plotCanvas(`<g class="ann-cells"></g>${field()}${categoryLabels()}<g class="ann-candidates"></g>
       <g class="query-dot"><path d="M0-12L12 0 0 12-12 0z" fill="${cyan}" stroke="#fff" stroke-width="2"/></g>`,
-    label("المرشّحين", 1107, 71, { cls: "big" }) +
+    label("Candidates", 1107, 71, { cls: "big" }) +
     '<g class="ann-metrics"></g>' +
-    circle(1202, 267, 7, "none", "#fff", 'stroke-width="1.7"') +
-    label("فيديو قريب", 1178, 273, { cls: "small", align: "start", color: muted }) +
-    `<path d="M1202 297l7 7-7 7-7-7z" fill="${cyan}"/>` +
-    label("استعلام", 1178, 310, { cls: "small", align: "start", color: muted }),
-    "خريطة فيديوهات تعليمية تفاعلية لبحث تقريبي وكامل");
+    circle(1017, 267, 7, "none", "#fff", 'stroke-width="1.7"') +
+    label("Nearby video", 1041, 273, { cls: "small", align: "start", color: muted }) +
+    `<path d="M1017 297l7 7-7 7-7-7z" fill="${cyan}"/>` +
+    label("Query", 1041, 310, { cls: "small", align: "start", color: muted }),
+    "Interactive map for approximate and exact search");
     return interactive(chart,
-      `<div role="group" aria-label="اهتمام المستخدم">${categories.map(({ title }, i) => button(`topic-${i}`, title, i === 0)).join("")}</div>
-      <span class="separator" aria-hidden="true"></span><div role="group" aria-label="طريقة البحث">
-      ${button("mode-ann", "بحث تقريبي", true)}${button("mode-exact", "بحث كامل", false)}</div>`);
+      `<div role="group" aria-label="Viewer interest">${categories.map(({ title }, i) => button(`topic-${i}`, title, i === 0)).join("")}</div>
+      <span class="separator" aria-hidden="true"></span><div role="group" aria-label="Search method">
+      ${button("mode-ann", "Approximate", true)}${button("mode-exact", "Exact", false)}</div>`);
   }
 
   function initANN(root) {
@@ -145,12 +145,12 @@
       ).join("");
       root.querySelector(".ann-metrics").innerHTML =
         label(`${compared.length} / ${points.length}`, 1107, 136, { cls: "mono big", color: cyan }) +
-        label("نقطة تمّت مقارنتها", 1107, 170, { cls: "small", color: muted }) +
+        label("points compared", 1107, 170, { cls: "small", color: muted }) +
         label(`${overlap} / 5`, 1107, 210, { cls: "mono big" }) +
-        label("مطابقة لأقرب نتائج البحث الكامل", 1107, 237, { cls: "tiny", color: muted });
+        label("match the exact top five", 1107, 237, { cls: "tiny", color: muted });
       setPressed(root, "topic-", `topic-${queryIndex}`);
       setPressed(root, "mode-", exact ? "mode-exact" : "mode-ann");
-      announce(root, `تمّت مقارنة ${compared.length} نقطة. ${overlap} من خمسة مرشحين طابقوا أقرب نتائج البحث الكامل.`);
+      announce(root, `Compared ${compared.length} points. ${overlap} of five candidates match the exact top five.`);
     }
 
     root.addEventListener("click", (event) => {
@@ -168,18 +168,18 @@
 
   function renderLearn() {
     const panel = canvas(1260, 386, frame(1260, 386) +
-      label("تقدير الاهتمام", 1126, 64, { cls: "big", align: "start" }) +
+      label("Estimated interest", 100, 64, { cls: "big", align: "start" }) +
       interestTopics.map(({ title, color }, i) => {
         const y = 104 + 79 * i;
-        return label(title, 1130, y + 21, { align: "start", cls: "small" }) +
+        return label(title, 100, y + 21, { align: "start", cls: "small" }) +
           box(250, y, 715, 30, "#1a2b3d", line, 5) +
           `<rect class="interest-bar" x="250" y="${y}" height="30" width="357.5" rx="5" fill="${color}"/>` +
-          `<text class="mono interest-value" x="219" y="${y + 22}" text-anchor="end" fill="${color}">50</text>`;
-      }).join("") + label("درجات اصطناعية", 1130, 357, { cls: "small", align: "start", color: muted }),
-    "تقديرات تعليمية للاهتمام بثلاثة مواضيع");
+          `<text class="mono interest-value" x="1008" y="${y + 22}" fill="${color}">50</text>`;
+      }).join("") + label("Illustrative scores", 100, 357, { cls: "small", align: "start", color: muted }),
+    "Example interest scores for three topics");
     return interactive(panel,
-      button("watch-cooking", "كمّل فيديو طبخ") + button("watch-ai", "كمّل فيديو ذكاء اصطناعي") +
-      button("skip-gaming", "تخطّى فيديو ألعاب") + button("reset", "إعادة الضبط"));
+      button("watch-cooking", "Finish cooking video") + button("watch-ai", "Finish AI video") +
+      button("skip-gaming", "Skip gaming video") + button("reset", "Reset"));
   }
 
   function initLearn(root) {
@@ -196,36 +196,36 @@
       }
       root.querySelectorAll(".interest-bar").forEach((bar, i) => { bar.style.width = `${7.15 * scores[i]}px`; });
       root.querySelectorAll(".interest-value").forEach((value, i) => { value.textContent = scores[i]; });
-      announce(root, interestTopics.map(({ title }, i) => `${title} ${scores[i]}`).join("، "));
+      announce(root, interestTopics.map(({ title }, i) => `${title} ${scores[i]}`).join(", "));
     });
   }
 
   const rankingItems = [
-    { title: "وصفة سريعة", p: [.86, .21], color: swatches[1] },
-    { title: "لقطة من مباراة", p: [.62, .84], color: swatches[3] },
-    { title: "شرح عن الذكاء الاصطناعي", p: [.74, .42], color: swatches[0] }
+    { title: "Quick recipe", p: [.86, .21], color: swatches[1] },
+    { title: "Game highlight", p: [.62, .84], color: swatches[3] },
+    { title: "AI explainer", p: [.74, .42], color: swatches[0] }
   ];
 
   function renderRanking() {
-    const heading = label("الترتيب", 1139, 60, { cls: "small", color: muted }) +
-      label("الفيديو", 976, 60, { cls: "small", align: "start", color: muted }) +
-      label("احتمال الإكمال", 537, 60, { cls: "small", color: muted }) +
-      label("احتمال المشاركة", 340, 60, { cls: "small", color: muted }) +
-      label("الدرجة", 145, 60, { cls: "small", color: muted });
+    const heading = label("Rank", 136, 60, { cls: "small", color: muted }) +
+      label("Video", 245, 60, { cls: "small", align: "start", color: muted }) +
+      label("Completion chance", 703, 60, { cls: "small", color: muted }) +
+      label("Share chance", 900, 60, { cls: "small", color: muted }) +
+      label("Score", 1124, 60, { cls: "small", color: muted });
     const rows = rankingItems.map(({ title, p, color }, i) =>
       `<g class="ranking-row" data-index="${i}">` +
-      box(56, 0, 1148, 62, "#152131", line, 7) + icon("play", 1034, 31, 24, color) +
-      '<text class="mono rank-number" x="1139" y="39" text-anchor="middle" fill="#ecf5ff"></text>' +
-      label(title, 976, 39, { align: "start" }) +
-      label(p[0].toFixed(2), 537, 39, { cls: "mono", color: muted }) +
-      label(p[1].toFixed(2), 340, 39, { cls: "mono", color: muted }) +
-      '<text class="mono rank-score" x="145" y="39" text-anchor="middle" fill="#66e7f2"></text></g>'
+      box(56, 0, 1148, 62, "#152131", line, 7) + icon("play", 208, 31, 24, color) +
+      '<text class="mono rank-number" x="136" y="39" text-anchor="middle" fill="#ecf5ff"></text>' +
+      label(title, 245, 39, { align: "start" }) +
+      label(p[0].toFixed(2), 703, 39, { cls: "mono", color: muted }) +
+      label(p[1].toFixed(2), 900, 39, { cls: "mono", color: muted }) +
+      '<text class="mono rank-score" x="1124" y="39" text-anchor="middle" fill="#66e7f2"></text></g>'
     ).join("");
     const panel = canvas(1260, 386, frame(1260, 386) + heading + rows +
       '<text class="mono rank-weights" x="630" y="351" text-anchor="middle" direction="ltr" fill="#aab5c4"></text>',
-    "ترتيب ثلاثة فيديوهات بناء على أوزان احتمالات الإكمال والمشاركة");
-    return interactive(panel, `<div role="group" aria-label="أولوية الترتيب">
-      ${button("rank-complete", "الأولوية للإكمال", true)}${button("rank-share", "الأولوية للمشاركة", false)}</div>`);
+    "Three videos ranked by weighted completion and sharing probabilities");
+    return interactive(panel, `<div role="group" aria-label="Ranking priority">
+      ${button("rank-complete", "Prioritize completion", true)}${button("rank-share", "Prioritize shares", false)}</div>`);
   }
 
   function initRanking(root) {
@@ -241,7 +241,7 @@
       });
       root.querySelector(".rank-weights").textContent = `${a.toFixed(1)} × P(Complete)  +  ${b.toFixed(1)} × P(Share)`;
       setPressed(root, "rank-", mode);
-      announce(root, ranked.map(({ title }, i) => `${i + 1} ${title}`).join("، "));
+      announce(root, ranked.map(({ title }, i) => `${i + 1} ${title}`).join(", "));
     }
     root.addEventListener("click", (event) => {
       const choice = event.target.closest("button")?.dataset.action;

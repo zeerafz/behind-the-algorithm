@@ -90,16 +90,15 @@
   function draw(slide) {
     const imageFile = photoFiles[slide.visual];
     const isHero = slide.layout === "hero";
-    const isEnglishTitle = isHero || slide.layout === "quote";
     const titleTag = isHero ? "h1" : "h2";
     const art = imageFile
       ? `<div class="art" aria-hidden="true"><img src="assets/images/${imageFile}.webp" alt=""></div>`
       : `<div class="visual enter">${visual[slide.visual]()}</div>`;
     const credits = isHero
-      ? `<div class="credits"><span>الطالب<bdi lang="en">Abdullah Alzeer</bdi></span><span>المدرّس<bdi lang="en">Mohammed Shambour</bdi></span></div>`
+      ? `<div class="credits"><span>Student<bdi lang="en">Abdullah Alzeer</bdi></span><span>Instructor<bdi lang="en">Mohammed Shambour</bdi></span></div>`
       : "";
     slideRoot.innerHTML = `<section class="slide ${slide.layout}" data-scene="${slide.visual}" aria-labelledby="slide-title">
-      ${art}<div class="copy enter"><${titleTag} id="slide-title"${isEnglishTitle ? ' lang="en" dir="ltr"' : ""}>${slide.title}</${titleTag}>
+      ${art}<div class="copy enter"><${titleTag} id="slide-title">${slide.title}</${titleTag}>
       ${slide.subtitle ? `<p>${slide.subtitle}</p>` : ""}</div>${credits}</section>`;
     const initDemo = window.DeckDemos[slide.visual];
     if (initDemo) initDemo(slideRoot.querySelector(".demo"));
@@ -119,7 +118,7 @@
     byId("counter").textContent = `${number(active)} / ${slides.length}`;
     byId("progress").value = active + 1;
     byId("notes-copy").textContent = slide.speakerNotes;
-    byId("announce").textContent = `شريحة ${active + 1} من ${slides.length}. ${plainTitle(slide)}`;
+    byId("announce").textContent = `Slide ${active + 1} of ${slides.length}. ${plainTitle(slide)}`;
     previous.disabled = active === 0;
     next.disabled = active === slides.length - 1;
     if (focusId === "next" && next.disabled) previous.focus();
@@ -149,7 +148,7 @@
       presenterWindow.focus();
     } else {
       setNotes(true);
-      tip("اسمح بالنوافذ المنبثقة لفتح نافذة المتحدّث.");
+      tip("Allow pop-ups to open the presenter window.");
     }
   }
 
@@ -168,10 +167,10 @@
       } else if (presentation.requestFullscreen) {
         await presentation.requestFullscreen();
       } else {
-        tip("استخدم خيار ملء الشاشة من المتصفّح.");
+        tip("Use your browser’s fullscreen option.");
       }
     } catch {
-      tip("استخدم خيار ملء الشاشة من المتصفّح.");
+      tip("Use your browser’s fullscreen option.");
     }
   }
 
@@ -200,11 +199,11 @@
     const key = event.key.toLowerCase();
     if (focusedButton && (key === " " || key === "enter")) return;
     switch (key) {
-      case "arrowleft":
+      case "arrowright":
       case " ":
       case "enter":
       case "pagedown": show(active + 1); break;
-      case "arrowright":
+      case "arrowleft":
       case "pageup": show(active - 1); break;
       case "home": show(0); break;
       case "end": show(slides.length - 1); break;
@@ -228,7 +227,7 @@
       button.type = "button";
       button.className = "chapter-jump";
       button.title = chapter;
-      button.setAttribute("aria-label", `انتقل إلى ${chapter}`);
+      button.setAttribute("aria-label", `Go to ${chapter}`);
       button.addEventListener("click", () => show(chapterStarts[index]));
       byId("chapter-progress").append(button);
     });
@@ -239,7 +238,6 @@
       item.type = "button";
       item.className = "overview-item";
       indexLabel.textContent = number(index);
-      indexLabel.dir = "ltr";
       title.textContent = plainTitle(slide);
       item.append(indexLabel, title);
       item.addEventListener("click", () => {
@@ -290,7 +288,7 @@
     if (swipe?.id !== event.pointerId) return;
     const dx = event.clientX - swipe.x;
     const dy = event.clientY - swipe.y;
-    if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.45) show(active + Math.sign(dx));
+    if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.45) show(active - Math.sign(dx));
     swipe = null;
   });
   stage.addEventListener("pointercancel", () => { swipe = null; });
